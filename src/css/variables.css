@@ -1,0 +1,61 @@
+/* src\css\variables.css */
+
+:root {
+  /* COLORS */
+  --hue: 0;
+  --saturation: 0%;
+  --lightness: 10%;
+  --alpha: 1;
+
+  --primary-color-shade-1: hsla(
+    var(--hue),
+    var(--saturation),
+    calc(var(--lightness) * 1),
+    calc(var(--alpha) * 1)
+  );
+  --primary-color-shade-2: hsla(
+    var(--hue),
+    var(--saturation),
+    calc(var(--lightness) * 2),
+    calc(var(--alpha) * 1)
+  );
+  --primary-color-shade-3: hsla(
+    var(--hue),
+    var(--saturation),
+    calc(var(--lightness) * 3),
+    calc(var(--alpha) * 1)
+  );
+  --primary-color-shade-4: hsla(
+    var(--hue),
+    var(--saturation),
+    calc(var(--lightness) * 4),
+    calc(var(--alpha) * 1)
+  );
+  --primary-color-shade-5: hsla(
+    var(--hue),
+    var(--saturation),
+    calc(var(--lightness) * 5),
+    calc(var(--alpha) * 1)
+  );
+  --primary-color-shade-6: hsla(
+    var(--hue),
+    var(--saturation),
+    calc(var(--lightness) * 6),
+    calc(var(--alpha) * 1)
+  );
+  --primary-color-shade-7: hsla(
+    var(--hue),
+    var(--saturation),
+    calc(var(--lightness) * 7),
+    calc(var(--alpha) * 1)
+  );
+  --primary-color-shade-8: hsla(
+    var(--hue),
+    var(--saturation),
+    calc(var(--lightness) * 8),
+    calc(var(--alpha) * 1)
+  );
+
+  /* TYPOGRAPHY */
+  --font-family: "Urbanist", sans-serif;
+}
