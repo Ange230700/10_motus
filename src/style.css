@@ -1,1 +1,10 @@
 /* src\style.css */
+
+/* === VARIABLES === */
+@import "./css/variables.css";
+
+/* === BASE === */
+@import "./css/base.css";
+
+/* === STYLE === */
+@import "./css/app.css";
