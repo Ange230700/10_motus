@@ -29,5 +29,9 @@
     "**/*": "prettier --write --ignore-unknown",
     "*.js": "eslint --cache --fix",
     "*.{js,css,md}": "prettier --write"
+  },
+  "validate-branch-name": {
+    "pattern": "^(master|main|develop){1}$|^(feature|fix|hotfix|release)/.+$",
+    "errorMsg": "Make sure to respect the git branch name convention"
   }
 }
