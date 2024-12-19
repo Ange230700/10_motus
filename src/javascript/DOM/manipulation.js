@@ -15,7 +15,7 @@ function reportVerdict() {
 
 function reportWordTriedByUserAndEmptyInputField() {
   document.getElementById("word-tried").innerHTML =
-    document.getElementById("word-to-check").value;
+    `The word tried is: ${document.getElementById("word-to-check").value}`;
   document.getElementById("word-to-check").value = "";
 }
 

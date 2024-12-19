@@ -15,8 +15,8 @@ function createApp() {
       <p id="letters-not-in-word"></p>
     </section>
     <section id="result">
-      <h1>Result</h1>
-      <h2 id="verdict"></h2>
+      <h2>Result</h2>
+      <h3 id="verdict"></h3>
     </section>
   `;
 }
