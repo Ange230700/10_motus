@@ -16,6 +16,7 @@ body {
 
 body {
   background-color: var(--primary-color-shade-1);
+  color: var(--primary-color-shade-8);
 }
 
 #app {
