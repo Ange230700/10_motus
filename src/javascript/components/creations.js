@@ -7,14 +7,14 @@ function createApp() {
       <input id="word-to-check" />
       <button type="button">Try</button>
     </section>
-    <section id="hints">
+    <section id="hints" style="display: none;">
       <h2>Hints</h2>
       <p id="word-tried"></p>
       <p id="letters-well-placed"></p>
       <p id="misplaced-letters"></p>
       <p id="letters-not-in-word"></p>
     </section>
-    <section id="result">
+    <section id="result" style="display: none;">
       <h2>Result</h2>
       <h3 id="verdict"></h3>
     </section>
