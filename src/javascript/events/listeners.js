@@ -8,7 +8,7 @@ function waitForDOMContentLoading() {
 
 function waitForWordSubmission() {
   document
-    .querySelector("#container button")
+    .querySelector("#word-submission button")
     .addEventListener("click", handleWordSubmission);
 }
 

@@ -1,76 +1,114 @@
 // src\javascript\helpers\utilities.js
 
-function checkIfUserHasFoundRightWord(word, base) {
+function checkIfUserHasFoundRightWord(wordSubmittedByUser, wordToGuess) {
   return (
-    typeof base === "string" &&
-    typeof base === typeof word &&
-    base.length === word.length &&
-    word.toLowerCase() === base.toLowerCase()
+    typeof wordToGuess === "string" &&
+    typeof wordToGuess === typeof wordSubmittedByUser &&
+    wordToGuess.length === wordSubmittedByUser.length &&
+    wordSubmittedByUser.toLowerCase() === wordToGuess.toLowerCase()
   );
 }
 
-function identifyWellPlacedLetters(arrayBase, arrayWord, wellPlaced) {
-  for (let index = 0; index < arrayBase.length; index++) {
-    if (arrayBase[index] === arrayWord[index]) {
-      wellPlaced.push(arrayWord[index]);
+function identifyWellPlacedLetters(
+  arrayOfLettersInWordToGuess,
+  arrayOfLettersInSubmittedWord,
+  arrayOfLettersPlacedInRightSpot,
+) {
+  for (
+    let letterPosition = 0;
+    letterPosition < arrayOfLettersInWordToGuess.length;
+    letterPosition++
+  ) {
+    if (
+      arrayOfLettersInWordToGuess[letterPosition] ===
+      arrayOfLettersInSubmittedWord[letterPosition]
+    ) {
+      arrayOfLettersPlacedInRightSpot.push(
+        arrayOfLettersInSubmittedWord[letterPosition],
+      );
     }
   }
 
-  return wellPlaced;
+  return arrayOfLettersPlacedInRightSpot;
 }
 
-function identifyMisplacedLetters(base, arrayWord, misplaced, wellPlaced) {
-  arrayWord.forEach((letter) => {
-    if (!wellPlaced.includes(letter) || base.split(letter).length - 1 > 1) {
-      if (base.includes(letter)) {
-        misplaced.push(letter);
+function identifyMisplacedLetters(
+  wordToGuess,
+  arrayOfLettersInSubmittedWord,
+  arrayOfMisplacedLetters,
+  arrayOfLettersPlacedInRightSpot,
+) {
+  arrayOfLettersInSubmittedWord.forEach((letter) => {
+    if (
+      !arrayOfLettersPlacedInRightSpot.includes(letter) ||
+      wordToGuess.split(letter).length - 1 > 1
+    ) {
+      if (wordToGuess.includes(letter)) {
+        arrayOfMisplacedLetters.push(letter);
       }
     }
   });
 
-  return misplaced;
+  return arrayOfMisplacedLetters;
 }
 
-function identifyLettersNotInBase(wellPlaced, misplaced, notInWord, arrayWord) {
-  arrayWord.forEach((letter) => {
-    if (!wellPlaced.includes(letter) && !misplaced.includes(letter)) {
-      notInWord.push(letter);
+function identifyLettersNotInBase(
+  arrayOfLettersPlacedInRightSpot,
+  arrayOfMisplacedLetters,
+  arrayOfLettersNotInWordToGuess,
+  arrayOfLettersInSubmittedWord,
+) {
+  arrayOfLettersInSubmittedWord.forEach((letter) => {
+    if (
+      !arrayOfLettersPlacedInRightSpot.includes(letter) &&
+      !arrayOfMisplacedLetters.includes(letter)
+    ) {
+      arrayOfLettersNotInWordToGuess.push(letter);
     }
   });
 
-  return notInWord;
+  return arrayOfLettersNotInWordToGuess;
 }
 
-function tryWord(word, base) {
-  let wellPlaced = [];
-  let misplaced = [];
-  let notInWord = [];
+function tryWord(wordSubmittedByUser, wordToGuess) {
+  let arrayOfLettersPlacedInRightSpot = [];
+  let arrayOfMisplacedLetters = [];
+  let arrayOfLettersNotInWordToGuess = [];
 
-  if (checkIfUserHasFoundRightWord(word, base)) {
+  if (checkIfUserHasFoundRightWord(wordSubmittedByUser, wordToGuess)) {
     return {
-      wellPlaced: word.split(""),
-      misplaced,
-      notInWord,
+      arrayOfLettersPlacedInRightSpot: wordSubmittedByUser.split(""),
+      arrayOfMisplacedLetters,
+      arrayOfLettersNotInWordToGuess,
     };
   }
 
-  let arrayBase = base.split("");
-  let arrayWord = word.split("");
+  let arrayOfLettersInWordToGuess = wordToGuess.split("");
+  let arrayOfLettersInSubmittedWord = wordSubmittedByUser.split("");
 
-  wellPlaced = identifyWellPlacedLetters(arrayBase, arrayWord, wellPlaced);
-  misplaced = identifyMisplacedLetters(base, arrayWord, misplaced, wellPlaced);
-  notInWord = identifyLettersNotInBase(
-    wellPlaced,
-    misplaced,
-    notInWord,
-    arrayWord,
+  arrayOfLettersPlacedInRightSpot = identifyWellPlacedLetters(
+    arrayOfLettersInWordToGuess,
+    arrayOfLettersInSubmittedWord,
+    arrayOfLettersPlacedInRightSpot,
+  );
+  arrayOfMisplacedLetters = identifyMisplacedLetters(
+    wordToGuess,
+    arrayOfLettersInSubmittedWord,
+    arrayOfMisplacedLetters,
+    arrayOfLettersPlacedInRightSpot,
+  );
+  arrayOfLettersNotInWordToGuess = identifyLettersNotInBase(
+    arrayOfLettersPlacedInRightSpot,
+    arrayOfMisplacedLetters,
+    arrayOfLettersNotInWordToGuess,
+    arrayOfLettersInSubmittedWord,
   );
 
   return {
-    wellPlaced,
-    misplaced,
-    notInWord,
+    arrayOfLettersPlacedInRightSpot,
+    arrayOfMisplacedLetters,
+    arrayOfLettersNotInWordToGuess,
   };
 }
 
-export { tryWord };
+export { tryWord, checkIfUserHasFoundRightWord };

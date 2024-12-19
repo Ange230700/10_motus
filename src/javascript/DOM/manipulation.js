@@ -1,7 +1,7 @@
 // src\javascript\DOM\manipulation.js
 
 import { createApp } from "../components/creations.js";
-import { tryWord } from "../helpers/utilities.js";
+import { checkIfUserHasFoundRightWord, tryWord } from "../helpers/utilities.js";
 
 function setAppHtmlContent() {
   document.querySelector("#app").innerHTML = `
@@ -9,24 +9,38 @@ function setAppHtmlContent() {
   `;
 }
 
-function guess() {
-  let base = "dictionnaire";
-  let result = tryWord(document.getElementById("word").value, base);
+function reportVerdict() {
+  document.getElementById("verdict").innerHTML = "You won!";
+}
 
-  if (result.wellPlaced.length === base.length) {
-    document.getElementById("win").innerText = "Vous avez gagné";
+function reportWordTriedByUserAndEmptyInputField() {
+  document.getElementById("word-tried").innerHTML =
+    document.getElementById("word-to-check").value;
+  document.getElementById("word-to-check").value = "";
+}
+
+function reportHints(wordTried) {
+  document.getElementById("letters-well-placed").innerHTML =
+    `The letters placed in the right spots are: ${wordTried.arrayOfLettersPlacedInRightSpot.join(", ")}`;
+  document.getElementById("misplaced-letters").innerHTML =
+    `The misplaced letters are: ${wordTried.arrayOfMisplacedLetters.join(", ")}`;
+  document.getElementById("letters-not-in-word").innerHTML =
+    `The letters not in the word to guess are: ${wordTried.arrayOfLettersNotInWordToGuess.join(", ")}`;
+}
+
+function guess() {
+  let wordToGuess = "dictionnaire";
+  let wordTried = tryWord(
+    document.getElementById("word-to-check").value,
+    wordToGuess,
+  );
+
+  if (checkIfUserHasFoundRightWord(wordTried, wordToGuess)) {
+    reportVerdict();
   }
 
-  document.getElementById("try").innerText =
-    document.getElementById("word").value;
-  document.getElementById("word").value = "";
-
-  document.getElementById("well").innerText =
-    "Bien placé: " + result.wellPlaced.join(", ");
-  document.getElementById("miss").innerText =
-    "Mal placé: " + result.misplaced.join(", ");
-  document.getElementById("not").innerText =
-    "Pas dans le mot: " + result.notInWord.join(", ");
+  reportWordTriedByUserAndEmptyInputField();
+  reportHints(wordTried);
 }
 
 export { setAppHtmlContent, guess };

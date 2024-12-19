@@ -2,15 +2,22 @@
 
 function createApp() {
   return `
-    <section id="container">
-      <input id="word" />
-      <button type="button" onclick="guess()">Ok</button>
+    <section id="word-submission">
+      <h2>Word Submission</h2>
+      <input id="word-to-check" />
+      <button type="button">Try</button>
     </section>
-    <p id="try"></p>
-    <p id="well"></p>
-    <p id="miss"></p>
-    <p id="not"></p>
-    <p id="win"></p>
+    <section id="hints">
+      <h2>Hints</h2>
+      <p id="word-tried"></p>
+      <p id="letters-well-placed"></p>
+      <p id="misplaced-letters"></p>
+      <p id="letters-not-in-word"></p>
+    </section>
+    <section id="result">
+      <h1>Result</h1>
+      <h2 id="verdict"></h2>
+    </section>
   `;
 }
 
