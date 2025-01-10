@@ -10,22 +10,21 @@ function checkIfUserHasFoundRightWord(wordSubmittedByUser, wordToGuess) {
 }
 
 function identifyWellPlacedLetters(
-  arrayOfLettersInWordToGuess,
-  arrayOfLettersInSubmittedWord,
   arrayOfLettersPlacedInRightSpot,
+  wordSubmittedByUser,
+  frequencyMap,
+  wordToGuess,
 ) {
-  for (
-    let letterPosition = 0;
-    letterPosition < arrayOfLettersInWordToGuess.length;
-    letterPosition++
-  ) {
+  for (let i = 0; i < wordSubmittedByUser.toLowerCase().split("").length; i++) {
     if (
-      arrayOfLettersInWordToGuess[letterPosition] ===
-      arrayOfLettersInSubmittedWord[letterPosition]
+      wordSubmittedByUser.toLowerCase().split("")[i] ===
+      wordToGuess.toLowerCase()[i]
     ) {
       arrayOfLettersPlacedInRightSpot.push(
-        arrayOfLettersInSubmittedWord[letterPosition],
+        wordSubmittedByUser.toLowerCase().split("")[i],
       );
+      frequencyMap[wordSubmittedByUser.toLowerCase().split("")[i]] =
+        frequencyMap[wordSubmittedByUser.toLowerCase().split("")[i]] - 1;
     }
   }
 
@@ -33,75 +32,102 @@ function identifyWellPlacedLetters(
 }
 
 function identifyMisplacedLetters(
-  wordToGuess,
-  arrayOfLettersInSubmittedWord,
   arrayOfMisplacedLetters,
-  arrayOfLettersPlacedInRightSpot,
+  wordSubmittedByUser,
+  frequencyMap,
+  wordToGuess,
 ) {
-  arrayOfLettersInSubmittedWord.forEach((letter) => {
+  console.log(wordSubmittedByUser.toLowerCase().split(""));
+  console.log(wordToGuess.toLowerCase());
+  for (let i = 0; i < wordSubmittedByUser.toLowerCase().split("").length; i++) {
     if (
-      !arrayOfLettersPlacedInRightSpot.includes(letter) ||
-      wordToGuess.split(letter).length - 1 > 1
+      wordSubmittedByUser.toLowerCase().split("")[i] !==
+        wordToGuess.toLowerCase()[i] &&
+      frequencyMap[wordSubmittedByUser.toLowerCase().split("")[i]] &&
+      frequencyMap[wordSubmittedByUser.toLowerCase().split("")[i]] > 0
     ) {
-      if (wordToGuess.includes(letter)) {
-        arrayOfMisplacedLetters.push(letter);
-      }
+      arrayOfMisplacedLetters.push(
+        wordSubmittedByUser.toLowerCase().split("")[i],
+      );
+      frequencyMap[wordSubmittedByUser.toLowerCase().split("")[i]] =
+        frequencyMap[wordSubmittedByUser.toLowerCase().split("")[i]] - 1;
     }
-  });
+  }
 
   return arrayOfMisplacedLetters;
 }
 
 function identifyLettersNotInBase(
-  arrayOfLettersPlacedInRightSpot,
-  arrayOfMisplacedLetters,
   arrayOfLettersNotInWordToGuess,
-  arrayOfLettersInSubmittedWord,
+  wordSubmittedByUser,
+  frequencyMap,
+  wordToGuess,
 ) {
-  arrayOfLettersInSubmittedWord.forEach((letter) => {
+  for (let i = 0; i < wordSubmittedByUser.toLowerCase().split("").length; i++) {
     if (
-      !arrayOfLettersPlacedInRightSpot.includes(letter) &&
-      !arrayOfMisplacedLetters.includes(letter)
+      wordSubmittedByUser.toLowerCase().split("")[i] !==
+        wordToGuess.toLowerCase()[i] &&
+      (!frequencyMap[wordSubmittedByUser.toLowerCase().split("")[i]] ||
+        frequencyMap[wordSubmittedByUser.toLowerCase().split("")[i]] <= 0)
     ) {
-      arrayOfLettersNotInWordToGuess.push(letter);
+      arrayOfLettersNotInWordToGuess.push(
+        wordSubmittedByUser.toLowerCase().split("")[i],
+      );
     }
-  });
+  }
 
   return arrayOfLettersNotInWordToGuess;
 }
 
+function BuildFrequencyMapOfTargetWordLetters(wordToGuess) {
+  const frequencyMap = {};
+  for (const letter of wordToGuess.toLowerCase()) {
+    frequencyMap[letter] = (frequencyMap[letter] || 0) + 1;
+  }
+
+  return frequencyMap;
+}
+
 function tryWord(wordSubmittedByUser, wordToGuess) {
+  if (
+    checkIfUserHasFoundRightWord(
+      wordSubmittedByUser.toLowerCase(),
+      wordToGuess.toLowerCase(),
+    )
+  ) {
+    return {
+      arrayOfLettersPlacedInRightSpot: wordSubmittedByUser
+        .toLowerCase()
+        .split(""),
+      arrayOfMisplacedLetters: [],
+      arrayOfLettersNotInWordToGuess: [],
+    };
+  }
+
+  const frequencyMap = BuildFrequencyMapOfTargetWordLetters(wordToGuess);
+  console.log(frequencyMap);
+
   let arrayOfLettersPlacedInRightSpot = [];
   let arrayOfMisplacedLetters = [];
   let arrayOfLettersNotInWordToGuess = [];
 
-  if (checkIfUserHasFoundRightWord(wordSubmittedByUser, wordToGuess)) {
-    return {
-      arrayOfLettersPlacedInRightSpot: wordSubmittedByUser.split(""),
-      arrayOfMisplacedLetters,
-      arrayOfLettersNotInWordToGuess,
-    };
-  }
-
-  let arrayOfLettersInWordToGuess = wordToGuess.split("");
-  let arrayOfLettersInSubmittedWord = wordSubmittedByUser.split("");
-
   arrayOfLettersPlacedInRightSpot = identifyWellPlacedLetters(
-    arrayOfLettersInWordToGuess,
-    arrayOfLettersInSubmittedWord,
     arrayOfLettersPlacedInRightSpot,
+    wordSubmittedByUser,
+    frequencyMap,
+    wordToGuess,
   );
   arrayOfMisplacedLetters = identifyMisplacedLetters(
-    wordToGuess,
-    arrayOfLettersInSubmittedWord,
     arrayOfMisplacedLetters,
-    arrayOfLettersPlacedInRightSpot,
+    wordSubmittedByUser,
+    frequencyMap,
+    wordToGuess,
   );
   arrayOfLettersNotInWordToGuess = identifyLettersNotInBase(
-    arrayOfLettersPlacedInRightSpot,
-    arrayOfMisplacedLetters,
     arrayOfLettersNotInWordToGuess,
-    arrayOfLettersInSubmittedWord,
+    wordSubmittedByUser,
+    frequencyMap,
+    wordToGuess,
   );
 
   return {
